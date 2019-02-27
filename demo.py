@@ -22,8 +22,17 @@ def create_example(text):
     "speakers": speakers,
   }
 
+# def print_predictions(example):
+#   words = util.flatten(example["sentences"])
+#   for cluster in example["predicted_clusters"]:
+#     print(u"Predicted cluster: {}".format([" ".join(words[m[0]:m[1]+1]) for m in cluster]))
+
 def print_predictions(example):
   words = util.flatten(example["sentences"])
+  for mention in example["mention_to_predicted"]:
+      print(mention)
+  for span in example["top_spans"]:
+      print(span)
   for cluster in example["predicted_clusters"]:
     print(u"Predicted cluster: {}".format([" ".join(words[m[0]:m[1]+1]) for m in cluster]))
 
@@ -45,6 +54,12 @@ if __name__ == "__main__":
   model = cm.CorefModel(config)
   with tf.Session() as session:
     model.restore(session)
-    while True:
-      text = input("Document text: ")
-      print_predictions(make_predictions(text, model))
+    text = "Forrest Gump is a 1986 novel by Winston Groom. The title character retells adventures ranging from " \
+           "shrimp boating and ping pong championships, to thinking about his childhood love, as he bumbles " \
+           "his way through American history, with everything from the Vietnam War to college football becoming " \
+           "part of the story. Gump is portrayed as viewing the world simply and truthfully. He does not know what " \
+           "he wants to do in life, but despite his low IQ, he is made out to be full of wisdom. He says that he " \
+           "can think things pretty good, but when he tries sayin or writin them, it kinda come out like Jello. " \
+           "His mathematical abilities, as an idiot savant, and feats of strength lead him into all kinds of " \
+           "adventures."
+    print_predictions(make_predictions(text, model))
